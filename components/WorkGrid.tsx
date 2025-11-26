@@ -1,118 +1,111 @@
 import React, { useRef } from 'react';
-import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, MotionValue } from 'framer-motion';
 import { Project } from '../types';
 
 const projects: Project[] = [
-  { id: 1, title: 'Abstract Art', category: '3D', image: 'https://picsum.photos/seed/art1/600/600', letter: 'A' },
-  { id: 2, title: 'Bold Brand', category: 'Identity', image: 'https://picsum.photos/seed/brand1/600/600', letter: 'B' },
-  { id: 3, title: 'Crypto Coin', category: 'Web3', image: 'https://picsum.photos/seed/crypto/600/600', letter: 'C' },
-  { id: 4, title: 'Digital Drop', category: 'Commerce', image: 'https://picsum.photos/seed/drop/600/600', letter: 'D' },
-  { id: 5, title: 'Electric EV', category: 'Product', image: 'https://picsum.photos/seed/ev/600/600', letter: 'E' },
-  { id: 6, title: 'Future Tech', category: 'AI', image: 'https://picsum.photos/seed/tech/600/600', letter: 'F' },
+  { id: 1, title: 'Æther Lens', category: '3D Direction', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2564&auto=format&fit=crop', letter: '01' },
+  { id: 2, title: 'Mono Scale', category: 'Visual Identity', image: 'https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?q=80&w=2668&auto=format&fit=crop', letter: '02' },
+  { id: 3, title: 'Neo Cortex', category: 'Web Experience', image: 'https://images.unsplash.com/photo-1620641788421-7a1c342ea42e?q=80&w=2574&auto=format&fit=crop', letter: '03' },
+  { id: 4, title: 'Void Runner', category: 'Motion Design', image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?q=80&w=2670&auto=format&fit=crop', letter: '04' },
 ];
 
-const Card: React.FC<{ project: Project }> = ({ project }) => {
-  const ref = useRef<HTMLDivElement>(null);
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
+const ProjectSection: React.FC<{ project: Project; index: number }> = ({ project, index }) => {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"]
+  });
 
-  const mouseXSpring = useSpring(x);
-  const mouseYSpring = useSpring(y);
-
-  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["17.5deg", "-17.5deg"]);
-  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-17.5deg", "17.5deg"]);
-
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    const rect = ref.current.getBoundingClientRect();
-    const width = rect.width;
-    const height = rect.height;
-    const mouseX = e.clientX - rect.left;
-    const mouseY = e.clientY - rect.top;
-    const xPct = mouseX / width - 0.5;
-    const yPct = mouseY / height - 0.5;
-    x.set(xPct);
-    y.set(yPct);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
+  const y = useTransform(scrollYProgress, [0, 1], ["-20%", "20%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.2, 0.9, 1], [0, 1, 1, 0]);
+  const scale = useTransform(scrollYProgress, [0, 0.5, 1], [1.1, 1, 1.1]);
+  const textY = useTransform(scrollYProgress, [0.2, 0.8], [50, -50]);
 
   return (
-    <motion.div
-      ref={ref}
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        rotateX,
-        rotateY,
-        transformStyle: "preserve-3d",
-      }}
-      className="relative h-[400px] w-full bg-dark border border-gray-800 overflow-hidden group cursor-pointer"
-    >
-      <div 
-        style={{ transform: "translateZ(75px)", transformStyle: "preserve-3d" }}
-        className="absolute inset-0 flex items-center justify-center pointer-events-none"
+    <div ref={containerRef} className="relative h-[120vh] w-full flex items-center justify-center overflow-hidden">
+      
+      {/* Background Image Parallax */}
+      <motion.div 
+        style={{ y, scale }}
+        className="absolute inset-0 z-0"
       >
-        <span className="font-pixel text-[12rem] text-gray-900 group-hover:text-neon transition-colors duration-500 opacity-50 z-0">
-          {project.letter}
-        </span>
+         <div className="absolute inset-0 bg-black/40 z-10" />
+         <img 
+           src={project.image} 
+           alt={project.title} 
+           className="w-full h-full object-cover opacity-60 transition-opacity duration-700 hover:opacity-80"
+         />
+      </motion.div>
+
+      {/* Content Content */}
+      <motion.div 
+        style={{ opacity, y: textY }}
+        className="relative z-20 container mx-auto px-6 flex flex-col md:flex-row justify-between items-end w-full mix-blend-difference"
+      >
+         <div className="mb-10 md:mb-0">
+            <span className="block font-display text-neon text-sm md:text-lg mb-4 tracking-widest uppercase">
+              {project.letter} / {project.category}
+            </span>
+            <h2 className="font-sans font-bold text-6xl md:text-9xl text-white tracking-tighter leading-none">
+              {project.title.split(' ')[0]}<br/>
+              <span className="ml-10 md:ml-20 text-stroke">{project.title.split(' ')[1]}</span>
+            </h2>
+         </div>
+
+         <div className="flex flex-col items-end">
+            <p className="font-display text-white/80 max-w-sm text-right text-lg md:text-xl leading-relaxed mb-8 hidden md:block">
+              A meticulously crafted digital experience pushing the boundaries of WebGL and interactivity.
+            </p>
+            <button className="group relative px-8 py-3 bg-transparent overflow-hidden border border-white/30 rounded-full">
+               <div className="absolute inset-0 w-full h-full bg-white origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100" />
+               <span className="relative font-display uppercase tracking-wider text-sm group-hover:text-black transition-colors duration-500">
+                 View Case Study
+               </span>
+            </button>
+         </div>
+      </motion.div>
+
+      {/* Side Progress Line */}
+      <div className="absolute left-6 md:left-12 top-0 bottom-0 w-[1px] bg-white/10 z-20">
+         <motion.div 
+           style={{ height: useTransform(scrollYProgress, [0, 1], ["0%", "100%"]) }}
+           className="w-full bg-neon shadow-[0_0_10px_#ccff00]"
+         />
       </div>
 
-      <div className="absolute inset-0 bg-black bg-opacity-60 transition-opacity group-hover:bg-opacity-80 z-10" />
-
-      <div className="absolute inset-0 p-8 flex flex-col justify-between z-20 pointer-events-none">
-        <div className="flex justify-between items-start">
-           <span className="font-mono text-xs text-neon border border-neon px-2 py-1 rounded-sm">00{project.id}</span>
-           <span className="font-pixel text-xl text-white transform translate-x-10 opacity-0 group-hover:translate-x-0 group-hover:opacity-100 transition-all duration-300">VIEW</span>
-        </div>
-        
-        <div style={{ transform: "translateZ(50px)" }}>
-          <h3 className="text-3xl font-sans font-bold text-white mb-2">{project.title}</h3>
-          <p className="text-gray-400 font-mono text-sm">{project.category}</p>
-        </div>
-      </div>
-      
-      {/* Background Image that reveals/moves */}
-      <motion.img 
-         src={project.image} 
-         alt={project.title}
-         className="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:opacity-60 transition-opacity duration-500 grayscale group-hover:grayscale-0"
-         style={{ transform: "translateZ(-20px) scale(1.2)" }}
-      />
-      
-      {/* Crosshair Elements */}
-      <div className="absolute top-4 left-4 w-4 h-4 border-l border-t border-white opacity-50"></div>
-      <div className="absolute top-4 right-4 w-4 h-4 border-r border-t border-white opacity-50"></div>
-      <div className="absolute bottom-4 left-4 w-4 h-4 border-l border-b border-white opacity-50"></div>
-      <div className="absolute bottom-4 right-4 w-4 h-4 border-r border-b border-white opacity-50"></div>
-
-    </motion.div>
+    </div>
   );
 };
 
 export const WorkGrid: React.FC = () => {
   return (
-    <section id="work" className="bg-dark py-24 relative">
-       <div className="container mx-auto px-4 mb-16 flex justify-between items-end">
-          <div className="max-w-xl">
-             <h2 className="font-pixel text-5xl md:text-7xl mb-6 text-white">SELECTED <br /> <span className="text-neon">WORKS</span></h2>
-             <p className="font-mono text-gray-400">A curation of digital experiences crafted with precision and chaos.</p>
-          </div>
-          <button className="hidden md:block font-sans font-bold text-lg text-white border-b-2 border-neon pb-1 hover:text-neon transition-colors">
-            FULL ARCHIVE
-          </button>
+    <section id="work" className="bg-brand-black relative">
+       {/* Introduction to Section */}
+       <div className="py-32 container mx-auto px-6">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="flex flex-col md:flex-row justify-between items-end border-b border-white/20 pb-12"
+          >
+             <h2 className="font-sans font-light text-5xl md:text-8xl text-white tracking-tight">
+               Selected<br/><span className="italic font-serif opacity-50">Works</span>
+             </h2>
+             <div className="mt-8 md:mt-0 max-w-md">
+                <p className="font-display text-gray-400 text-sm md:text-base leading-relaxed uppercase tracking-wide">
+                  We don't just build websites. We craft immersive digital narratives that define brands.
+                </p>
+             </div>
+          </motion.div>
        </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 w-full border-t border-gray-800">
-        {projects.map((project) => (
-          <div key={project.id} className="border-r border-b border-gray-800">
-            <Card project={project} />
-          </div>
+      <div className="w-full">
+        {projects.map((project, index) => (
+          <ProjectSection key={project.id} project={project} index={index} />
         ))}
       </div>
+      
+      <div className="h-32 bg-brand-black" />
     </section>
   );
 };
