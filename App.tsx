@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { CustomCursor } from './components/CustomCursor';
 import { Navbar } from './components/Navbar';
@@ -7,38 +6,32 @@ import { Manifesto } from './components/Manifesto';
 import { WorkGrid } from './components/WorkGrid';
 import { Team } from './components/Team';
 import { Footer } from './components/Footer';
-import { WorksPage } from './pages/WorksPage';
-import { AboutPage } from './pages/AboutPage';
-import { UpdatesPage } from './pages/UpdatesPage';
-import { CapabilitiesPage } from './pages/CapabilitiesPage';
+import { WorksPage } from './components/WorksPage';
+import { AboutPage } from './components/AboutPage';
+import { UpdatesPage } from './components/UpdatesPage';
+import { CapabilitiesPage } from './components/CapabilitiesPage';
+import { NavigationProvider } from './components/NavigationContext';
 
 function App() {
   const [currentPage, setCurrentPage] = useState('home');
 
-  // Handle hash changes
-  useEffect(() => {
-    const handleHashChange = () => {
-      // Remove the '#' and default to 'home' if empty
-      const hash = window.location.hash.replace('#', '') || 'home';
-      setCurrentPage(hash);
-    };
-
-    // Listen for hash changes
-    window.addEventListener('hashchange', handleHashChange);
-    
-    // Set initial page based on current URL
-    handleHashChange();
-
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  }, []);
+  const navigateTo = (page: string) => {
+    if (page === 'contact') {
+      // Handle contact scroll separately
+      const contactSection = document.getElementById('contact');
+      if (contactSection) {
+        contactSection.scrollIntoView({ behavior: 'smooth' });
+      }
+    } else {
+      setCurrentPage(page);
+    }
+  };
 
   // Handle Scroll to Top on page change
   useEffect(() => {
-    // We use a small timeout to ensure the DOM has updated before scrolling
-    const timer = setTimeout(() => {
+    if (currentPage !== 'contact') {
       window.scrollTo({ top: 0, behavior: 'instant' });
-    }, 10);
-    return () => clearTimeout(timer);
+    }
   }, [currentPage]);
 
   const renderPage = () => {
@@ -52,7 +45,7 @@ function App() {
       case 'capabilities':
         return <CapabilitiesPage />;
       default:
-        // 'home' or any unknown route renders the Landing Page sections
+        // 'home' renders the Landing Page sections
         return (
           <>
             <Hero />
@@ -65,16 +58,18 @@ function App() {
   };
 
   return (
-    <div className="bg-brand-black text-white selection:bg-neon selection:text-black cursor-none min-h-screen flex flex-col">
-      <CustomCursor />
-      <Navbar />
-      
-      <main className="flex-grow">
-        {renderPage()}
-      </main>
-      
-      <Footer />
-    </div>
+    <NavigationProvider value={{ currentPage, navigateTo }}>
+      <div className="bg-brand-black text-white selection:bg-neon selection:text-black cursor-none min-h-screen flex flex-col">
+        <CustomCursor />
+        <Navbar />
+        
+        <main className="flex-grow">
+          {renderPage()}
+        </main>
+        
+        <Footer />
+      </div>
+    </NavigationProvider>
   );
 }
 

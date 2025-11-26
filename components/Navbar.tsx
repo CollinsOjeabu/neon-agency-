@@ -2,9 +2,16 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { useNavigation } from './NavigationContext';
 
 export const Navbar: React.FC = () => {
   const [isOpen, setIsOpen] = React.useState(false);
+  const { navigateTo } = useNavigation();
+
+  const handleNavClick = (page: string) => {
+    setIsOpen(false);
+    navigateTo(page);
+  };
 
   return (
     <motion.nav 
@@ -15,25 +22,29 @@ export const Navbar: React.FC = () => {
     >
       {/* Logo Area */}
       <div className="pointer-events-auto cursor-pointer flex-1">
-        <a href="#home" className="font-display text-2xl tracking-tighter font-bold uppercase">NEON</a>
+        <button onClick={() => handleNavClick('home')} className="font-display text-2xl tracking-tighter font-bold uppercase">NEON</button>
       </div>
 
       {/* Center Links - Desktop */}
       <div className="hidden md:flex gap-12 font-sans text-xs uppercase tracking-widest font-semibold pointer-events-auto flex-1 justify-center">
         {['Works', 'About', 'Updates'].map((item) => (
-          <a key={item} href={`#${item.toLowerCase()}`} className="relative group overflow-hidden">
+          <button 
+            key={item} 
+            onClick={() => handleNavClick(item.toLowerCase())}
+            className="relative group overflow-hidden"
+          >
             <span className="block group-hover:-translate-y-full transition-transform duration-300 ease-[0.16,1,0.3,1]">{item}</span>
             <span className="absolute top-0 left-0 block translate-y-full group-hover:translate-y-0 transition-transform duration-300 ease-[0.16,1,0.3,1] text-neon">{item}</span>
-          </a>
+          </button>
         ))}
       </div>
 
       {/* Right CTA - Desktop */}
       <div className="hidden md:flex flex-1 justify-end pointer-events-auto">
-        <a href="#contact" className="group flex items-center gap-2 border border-white/30 rounded-full px-6 py-2 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-300">
+        <button onClick={() => handleNavClick('contact')} className="group flex items-center gap-2 border border-white/30 rounded-full px-6 py-2 backdrop-blur-sm hover:bg-white hover:text-black transition-all duration-300">
           <span className="w-2 h-2 rounded-full bg-neon group-hover:bg-black transition-colors" />
           <span className="font-sans text-xs uppercase tracking-widest font-semibold">Start a Project</span>
-        </a>
+        </button>
       </div>
 
       {/* Mobile Menu Toggle */}
@@ -50,14 +61,13 @@ export const Navbar: React.FC = () => {
               <X size={24} />
            </button>
            {['Home', 'Works', 'About', 'Updates', 'Contact'].map((item) => (
-            <a 
+            <button 
               key={item} 
-              href={`#${item.toLowerCase()}`} 
+              onClick={() => handleNavClick(item.toLowerCase())}
               className="text-5xl font-sans font-light hover:text-neon transition-colors tracking-tighter"
-              onClick={() => setIsOpen(false)}
             >
               {item}
-            </a>
+            </button>
           ))}
         </div>
       )}

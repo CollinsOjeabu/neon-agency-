@@ -1,8 +1,11 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
+import { useNavigation } from './NavigationContext';
 
 export const Manifesto: React.FC = () => {
+  const { navigateTo } = useNavigation();
+
   return (
     <section id="agency" className="relative bg-brand-white text-brand-black py-32 md:py-48 overflow-hidden rounded-t-[3rem] md:rounded-t-[5rem] -mt-20 z-30 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
       
@@ -83,8 +86,8 @@ export const Manifesto: React.FC = () => {
 
            <div className="flex flex-col justify-end">
               <div className="w-full h-[1px] bg-black/10 mb-8"></div>
-              {/* This link directs to the Capabilities Page via hash routing */}
-              <a href="#capabilities" className="block w-full">
+              {/* This link directs to the Capabilities Page via context routing */}
+              <button onClick={() => navigateTo('capabilities')} className="block w-full text-left">
                 <motion.div 
                     whileHover={{ x: 10 }}
                     className="flex justify-between items-center group cursor-pointer"
@@ -94,7 +97,7 @@ export const Manifesto: React.FC = () => {
                         →
                     </div>
                 </motion.div>
-              </a>
+              </button>
            </div>
         </div>
 
