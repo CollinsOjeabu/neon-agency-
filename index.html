@@ -1,77 +1,81 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NEON | AI Design Agency</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400;600;800&display=swap" rel="stylesheet">
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            colors: {
-              neon: '#ccff00',
-              brand: {
-                black: '#000000',
-                white: '#FCFCFC',
-                gray: '#1a1a1a'
-              }
-            },
-            fontFamily: {
-              sans: ['Manrope', 'sans-serif'], // More sophisticated than Inter
-              display: ['Inter', 'sans-serif'], // For structural headers
-            },
-            backgroundImage: {
-              'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NEON | AI Design Agency</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Manrope:wght@200;300;400;600;800&display=swap"
+    rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            neon: '#ccff00',
+            brand: {
+              black: '#000000',
+              white: '#FCFCFC',
+              gray: '#1a1a1a'
             }
+          },
+          fontFamily: {
+            sans: ['Manrope', 'sans-serif'], // More sophisticated than Inter
+            display: ['Inter', 'sans-serif'], // For structural headers
+          },
+          backgroundImage: {
+            'noise': "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22 opacity=%220.05%22/%3E%3C/svg%3E')",
           }
         }
       }
-    </script>
-    <style>
-      body {
-        background-color: #000000;
-        color: #FCFCFC;
-        overflow-x: hidden;
-      }
-      
-      /* Smooth scrolling enhancement */
-      html {
-        scroll-behavior: smooth;
-      }
+    }
+  </script>
+  <style>
+    body {
+      background-color: #000000;
+      color: #FCFCFC;
+      overflow-x: hidden;
+    }
 
-      .no-scrollbar::-webkit-scrollbar {
-        display: none;
-      }
-      .no-scrollbar {
-        -ms-overflow-style: none;
-        scrollbar-width: none;
-      }
-      
-      .text-stroke {
-        -webkit-text-stroke: 1px rgba(252, 252, 252, 0.5);
-        color: transparent;
-      }
-      
-      .text-stroke-hover:hover {
-        -webkit-text-stroke: 0px;
-        color: #FCFCFC;
-      }
+    /* Smooth scrolling enhancement */
+    html {
+      scroll-behavior: smooth;
+    }
 
-      .text-stroke-black {
-        -webkit-text-stroke: 1px rgba(0, 0, 0, 1);
-        color: transparent;
-      }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
 
-      /* Custom Selection */
-      ::selection {
-        background: #ccff00;
-        color: #000000;
-      }
-    </style>
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+
+    .text-stroke {
+      -webkit-text-stroke: 1px rgba(252, 252, 252, 0.5);
+      color: transparent;
+    }
+
+    .text-stroke-hover:hover {
+      -webkit-text-stroke: 0px;
+      color: #FCFCFC;
+    }
+
+    .text-stroke-black {
+      -webkit-text-stroke: 1px rgba(0, 0, 0, 1);
+      color: transparent;
+    }
+
+    /* Custom Selection */
+    ::selection {
+      background: #ccff00;
+      color: #000000;
+    }
+  </style>
   <script type="importmap">
 {
   "imports": {
@@ -84,7 +88,10 @@
 }
 </script>
 </head>
-  <body>
-    <div id="root"></div>
-  </body>
+
+<body>
+  <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+
 </html>
